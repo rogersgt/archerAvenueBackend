@@ -1,0 +1,30 @@
+{
+  "name": "archer-avenue-backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "handler.js",
+  "scripts": {
+    "build": "babel src --out-dir dist",
+    "deploy:dev": "yarn && yarn build && serverless deploy --stage dev",
+    "deploy:prod": "yarn && yarn build && serverless deploy --stage prod",
+    "test": "yarn build && mocha --require babel-core/register"
+  },
+  "author": "Grady Rogers",
+  "license": "ISC",
+  "dependencies": {
+    "babel-core": "6.26.0",
+    "babel-polyfill": "6.26.0",
+    "babel-preset-env": "1.6.1"
+  },
+  "devDependencies": {
+    "aws-sdk": "2.207.0",
+    "chai": "4.1.2",
+    "chai-spies": "1.0.0",
+    "dotenv": "5.0.1",
+    "eslint": "^4.19.0",
+    "eslint-plugin-async-await": "^0.0.0",
+    "jshint": "^2.9.5",
+    "mocha": "5.0.1",
+    "serverless": "1.26.1"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "envs": [
+    "es6"
+  ],
+  "plugins": [
+    "async-await"
+  ]
+}

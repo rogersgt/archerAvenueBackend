@@ -1,0 +1,81 @@
+service: serverless-email
+frameworkVersion: ">=1.0.0 <2.0.0"
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  logRetentionInDays: 3 # Set the default RetentionInDays for a CloudWatch LogGroup
+  apiKeys:
+    - email_${opt:stage}
+  region: ${opt:region, 'us-east-1'}
+  profile: ${opt:profile}
+  stage: ${opt:stage, 'dev'}
+
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - "ses:*"
+      Resource: "*"
+    - Effect: "Allow"
+      Action:
+        - "s3:ListBuckets"
+        - "s3:PutObject"
+        - "s3:ListObjects"
+        - "s3:GetObject"
+      Resource: "*"
+
+package:
+ include:
+   - dist/**
+ exclude:
+   - .env
+   - .gitignore
+   - package.json
+   - yarn.lock
+   - .babelrc
+   - env.json
+   - README.md
+
+resources:
+  Resources:
+    LoginsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: "S"
+          - AttributeName: username
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+          - AttributeName: username
+            KeyType: RANGE
+        TableName: UserLogin
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+
+
+functions:
+  mail:
+    handler: dist/handler.mail
+    environment:
+     NODE_ENV: ${file(./env.json):NODE_ENV}
+     TO_EMAIL: ${file(./env.json):TO_EMAIL}
+     FROM_EMAIL: ${file(./env.json):FROM_EMAIL}
+    events:
+      - http:
+          path: /mail
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: true
+          private: true
