@@ -1,0 +1,7 @@
+{
+  "body": {
+    "email": "grady@rhinogram.com",
+    "subject": "test",
+    "message": "This is the body of the email from local invoke"
+  }
+}

@@ -6,11 +6,20 @@ Use `yarn test` to invoke mochai/chai tests. Create a `.env` for tests with the 
 * AWS_REGION='some region like us-east-1'
 * AWS_ACCESS_KEY_ID='your access key'
 * AWS_SECRET_ACCESS_KEY='your secret key'
+* HASH_STRING='somerandomstring
+* LOGIN_TABLE='DynamoDBTableName'
 
 ### Deploy
 Create a `env.json` file with at least the following:
-* FROM_EMAIL: 'some email address'
-* TO_EMAIL: 'some email address'
-* NODE_ENV: 'node environment'
+```bash
+{
+  "FROM_EMAIL": "someVerifiedEmail@address.com",
+  "TO_EMAIL": "someVerifiedEmail@address.com",
+  "NODE_ENV": "development",
+  "HASH_STRING": "asdcn2kdl2kd",
+  "LOGIN_TABLE": "Login",
+  "AWS_REGION": "us-east-1"
+}
+```
 
 Use `yarn deploy:dev` or `yarn deploy:prod`.

@@ -18,6 +18,10 @@ provider:
       Resource: "*"
     - Effect: "Allow"
       Action:
+        - "dynamodb:*"
+      Resource: "*"
+    - Effect: "Allow"
+      Action:
         - "s3:ListBuckets"
         - "s3:PutObject"
         - "s3:ListObjects"
@@ -42,16 +46,12 @@ resources:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
-          - AttributeName: id
-            AttributeType: "S"
           - AttributeName: username
             AttributeType: "S"
         KeySchema:
-          - AttributeName: id
-            KeyType: HASH
           - AttributeName: username
-            KeyType: RANGE
-        TableName: UserLogin
+            KeyType: HASH
+        TableName: ${file(./env.json):LOGIN_TABLE}
         ProvisionedThroughput:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5
@@ -59,7 +59,7 @@ resources:
 
 functions:
   mail:
-    handler: dist/handler.mail
+    handler: dist/mail.mail
     environment:
      NODE_ENV: ${file(./env.json):NODE_ENV}
      TO_EMAIL: ${file(./env.json):TO_EMAIL}
@@ -67,6 +67,28 @@ functions:
     events:
       - http:
           path: /mail
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - X-Amz-User-Agent
+            allowCredentials: true
+          private: true
+
+  login:
+    handler: dist/login.login
+    environment:
+     NODE_ENV: ${file(./env.json):NODE_ENV}
+     HASH_STRING: ${file(./env.json):HASH_STRING}
+     LOGIN_TABLE: ${file(./env.json):LOGIN_TABLE}
+    events:
+      - http:
+          path: /login
           method: post
           cors:
             origin: '*'
