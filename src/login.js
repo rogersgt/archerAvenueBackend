@@ -1,23 +1,12 @@
 'use strict';
 import 'babel-polyfill';
-import crypto from 'crypto';
+import { handleBody } from './toolbox/validator';
+import * as auth from './toolbox/auth';
 import { DynamoDB } from 'aws-sdk';
 
 const ddb = new DynamoDB({ apiVersion: '2012-08-10' });
 
-function handleBody(body) {
-  if (typeof body === 'string') {
-    return JSON.parse(body);
-  }
-  return body;
-}
-
-function hashPassword(password){
-  const hash = crypto.createHmac('sha512', process.env.HASH_STRING);
-  hash.update(password);
-  return hash.digest('hex');
-}
-
+// ------------- lambda export ---------------- //
 module.exports.login = async function(event, context, callback) {
   const body = handleBody(event.body);
 

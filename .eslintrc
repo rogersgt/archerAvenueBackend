@@ -1,8 +1,9 @@
 {
-  "envs": [
-    "es6"
-  ],
-  "plugins": [
-    "async-await"
-  ]
+  "env": {
+    "es6": true
+  },
+  "parserOptions": {
+    "sourceType": "module",
+    "ecmaVersion": 2017
+  }
 }

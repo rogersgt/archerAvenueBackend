@@ -1,4 +1,13 @@
-service: serverless-email
+service: archeravenue-api
+package:
+  individually: true
+  exclude:
+    - node_modules/**
+    - test/**
+    - env.json
+    - dist/**
+    - src/**
+    - addUser.js
 frameworkVersion: ">=1.0.0 <2.0.0"
 
 provider:
@@ -12,33 +21,21 @@ provider:
   stage: ${opt:stage, 'dev'}
 
   iamRoleStatements:
-    - Effect: "Allow"
+    - Effect: Allow
       Action:
-        - "ses:*"
-      Resource: "*"
-    - Effect: "Allow"
+        - ses:*
+      Resource: '*'
+    - Effect: Allow
       Action:
-        - "dynamodb:*"
-      Resource: "*"
-    - Effect: "Allow"
+        - dynamodb:*
+      Resource: '*'
+    - Effect: Allow
       Action:
-        - "s3:ListBuckets"
-        - "s3:PutObject"
-        - "s3:ListObjects"
-        - "s3:GetObject"
-      Resource: "*"
-
-package:
- include:
-   - dist/**
- exclude:
-   - .env
-   - .gitignore
-   - package.json
-   - yarn.lock
-   - .babelrc
-   - env.json
-   - README.md
+        - s3:ListBuckets
+        - s3:PutObject
+        - s3:ListObjects
+        - s3:GetObject
+      Resource: '*'
 
 resources:
   Resources:
@@ -60,6 +57,10 @@ resources:
 functions:
   mail:
     handler: dist/mail.mail
+    package:
+      include:
+        - dist/toolbox/*
+        - dist/mail.js
     environment:
      NODE_ENV: ${file(./env.json):NODE_ENV}
      TO_EMAIL: ${file(./env.json):TO_EMAIL}
@@ -82,6 +83,11 @@ functions:
 
   login:
     handler: dist/login.login
+    package:
+      include:
+        - dist/toolbox/*
+        - dist/login.js
+        - node_modules/**
     environment:
      NODE_ENV: ${file(./env.json):NODE_ENV}
      HASH_STRING: ${file(./env.json):HASH_STRING}

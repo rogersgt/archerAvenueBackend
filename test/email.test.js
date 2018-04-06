@@ -10,7 +10,7 @@ const should = chai.should;
 
 dotenv.config({ path: `${__dirname}/../.env` });
 
-describe('e2e: sendEmail', () => {
+describe('sendEmail', () => {
   it('Should invoke the callback function', async () => {
     const emailMessage = {
       email: 'test@email.com',
