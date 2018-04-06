@@ -11,7 +11,7 @@ module.exports.login = async function(event, context, callback) {
   const body = handleBody(event.body);
 
   if (!body || !body.username || !body.password) {
-    callback('Must include a username and password');
+    callback('Must include a username and password', { eventStatus: 400 });
   }
 
   const params = {
@@ -28,7 +28,7 @@ module.exports.login = async function(event, context, callback) {
       callback('No user found');
     }
 
-    const hashedPasswordAttempt = hashPassword(body.password);
+    const hashedPasswordAttempt = auth.hashPassword(body.password);
     if (hashedPasswordAttempt === dynamoRes.Item.password.S) {
       callback(null, {
         statusCode: 204,
