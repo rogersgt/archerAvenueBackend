@@ -1,4 +1,5 @@
-# Serverless SES
+# Archer Avenue Studio API
+The Backend for https://github.com/rogersgt/archeravenuestudio
 ### Tests
 Use `yarn test` to invoke mochai/chai tests. Create a `.env` for tests with the following:
 * FROM_EMAIL='some email address'
