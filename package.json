@@ -8,7 +8,8 @@
     "deploy:dev": "yarn --production=true && yarn build && serverless deploy --stage dev",
     "deploy:prod": "yarn --production=true && yarn build && serverless deploy --stage prod",
     "test:unit": "yarn build && mocha --require babel-core/register",
-    "test:login": "yarn build && serverless invoke local --function login -p test/payloads/login.json --stage dev"
+    "test:login": "yarn build && SLS_DEBUG=* serverless invoke local -f login -p test/events/login.event.json --stage dev",
+    "test:mail": "yarn build && SLS_DEBUG=* serverless invoke local -f mail -p test/events/mail.event.json --stage dev"
   },
   "author": "Grady Rogers",
   "license": "ISC",
@@ -26,7 +27,7 @@
     "eslint": "4.19.0",
     "eslint-plugin-async-await": "0.0.0",
     "jshint": "2.9.5",
-    "mocha": "5.0.1",
+    "mocha": "^5.0.5",
     "serverless": "1.26.1"
   }
 }

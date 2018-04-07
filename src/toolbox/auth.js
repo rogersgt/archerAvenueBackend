@@ -1,21 +1,21 @@
 import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
-export function authToken(token) {
+export function tokenIsValid(token) {
   jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
-      return Promise.reject('Unauthorized');
+      console.log(err);
+      return false;
     }
-    return Promise.resolve(decoded);
+    return true;
   });
 }
 
-export async function genToken(str) {
+export function genToken(str) {
   return jwt.sign({
-    data: str
-  }, {
-    expiresIn: '48h'
-  });
+    data: str,
+    exp: Math.floor(Date.now() / 1000) + (60 * 48) // 48 hours
+  }, process.env.JWT_SECRET);
 }
 
 export function hashPassword(password){

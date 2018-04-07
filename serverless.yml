@@ -15,7 +15,7 @@ provider:
   runtime: nodejs6.10
   logRetentionInDays: 3 # Set the default RetentionInDays for a CloudWatch LogGroup
   apiKeys:
-    - email_${opt:stage}
+    - archerave_${opt:stage}
   region: ${opt:region, 'us-east-1'}
   profile: ${opt:profile}
   stage: ${opt:stage, 'dev'}
@@ -62,7 +62,6 @@ functions:
         - dist/toolbox/*
         - dist/mail.js
     environment:
-     NODE_ENV: ${file(./env.json):NODE_ENV}
      TO_EMAIL: ${file(./env.json):TO_EMAIL}
      FROM_EMAIL: ${file(./env.json):FROM_EMAIL}
     events:
@@ -89,9 +88,10 @@ functions:
         - dist/login.js
         - node_modules/**
     environment:
-     NODE_ENV: ${file(./env.json):NODE_ENV}
-     HASH_STRING: ${file(./env.json):HASH_STRING}
-     LOGIN_TABLE: ${file(./env.json):LOGIN_TABLE}
+      NODE_ENV: ${file(./env.json):NODE_ENV}
+      HASH_STRING: ${file(./env.json):HASH_STRING}
+      LOGIN_TABLE: ${file(./env.json):LOGIN_TABLE}
+      JWT_SECRET: ${file(./env.json):JWT_SECRET}
     events:
       - http:
           path: /login
@@ -107,3 +107,32 @@ functions:
               - X-Amz-User-Agent
             allowCredentials: true
           private: true
+
+  changePassword:
+    handler: dist/login.changePassword
+    package:
+      include:
+        - dist/login.js
+        - node_modules/**
+        - dist/toolbox/**
+    environment:
+      NODE_ENV: ${file(./env.json):NODE_ENV}
+      HASH_STRING: ${file(./env.json):HASH_STRING}
+      LOGIN_TABLE: ${file(./env.json):LOGIN_TABLE}
+      JWT_SECRET: ${file(./env.json):JWT_SECRET}
+    events:
+      - http:
+          path: /changepassword
+          method: patch
+          cors:
+            origin: '*'
+            headers:
+              - Context-Type
+              - X-Amz-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - x-Amx-User-Agent
+            allowCredentials: true
+          private: true
+      

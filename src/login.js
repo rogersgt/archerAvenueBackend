@@ -30,18 +30,38 @@ module.exports.login = async function(event, context, callback) {
 
     const hashedPasswordAttempt = auth.hashPassword(body.password);
     if (hashedPasswordAttempt === dynamoRes.Item.password.S) {
+      const token = auth.genToken(body.username);
+
       callback(null, {
         statusCode: 204,
-        body: JSON.stringify(dynamoRes),
         headers: {
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': '*'
+          'Set-Cookie': `${process.env.TOKEN_NAME}=${token}`
         }
       });
     } else {
-      callback('Username or password is incorrect');
+      callback(null, {
+        statusCode: 403,
+        body: JSON.stringify({ errorMessage: 'Username or password is incorrect' })
+      });
     }
   } catch(err) {
+    console.log(err);
+    callback(err);
+  }
+};
+
+
+module.exports.changePassword = async (event, context, callback) => {
+  try {
+    if (!auth.tokenIsValid(event.headers[process.env.TOKEN_NAME])) {
+      callback(null, {
+        statusCode: 403,
+        body: JSON.stringify({ errorMessage: 'Unauthorized' })
+      });
+    }
+    
+    callback(null, { statusCode: 204 });
+  } catch (err) {
     console.log(err);
     callback(err);
   }

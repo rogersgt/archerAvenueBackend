@@ -16,9 +16,10 @@ Create a `env.json` file with at least the following:
   "FROM_EMAIL": "someVerifiedEmail@address.com",
   "TO_EMAIL": "someVerifiedEmail@address.com",
   "NODE_ENV": "development",
-  "HASH_STRING": "asdcn2kdl2kd",
-  "LOGIN_TABLE": "Login",
-  "AWS_REGION": "us-east-1"
+  "HASH_STRING": "anyStringForHashingPasswords",
+  "LOGIN_TABLE": "nameOfADynamoDBtableToCreate",
+  "AWS_REGION": "us-east-1",
+  "JWT_SECRET": "anyStringForSigningTokens"
 }
 ```
 
