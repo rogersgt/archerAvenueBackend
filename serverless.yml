@@ -19,6 +19,8 @@ provider:
   region: ${opt:region, 'us-east-1'}
   profile: ${opt:profile}
   stage: ${opt:stage, 'dev'}
+  environment:
+    NODE_ENV: ${file(./env.json):NODE_ENV}
 
   iamRoleStatements:
     - Effect: Allow
@@ -88,10 +90,10 @@ functions:
         - dist/login.js
         - node_modules/**
     environment:
-      NODE_ENV: ${file(./env.json):NODE_ENV}
       HASH_STRING: ${file(./env.json):HASH_STRING}
       LOGIN_TABLE: ${file(./env.json):LOGIN_TABLE}
       JWT_SECRET: ${file(./env.json):JWT_SECRET}
+      TOKEN_NAME: ${file(./env.json):TOKEN_NAME}
     events:
       - http:
           path: /login
@@ -116,10 +118,10 @@ functions:
         - node_modules/**
         - dist/toolbox/**
     environment:
-      NODE_ENV: ${file(./env.json):NODE_ENV}
       HASH_STRING: ${file(./env.json):HASH_STRING}
       LOGIN_TABLE: ${file(./env.json):LOGIN_TABLE}
       JWT_SECRET: ${file(./env.json):JWT_SECRET}
+      TOKEN_NAME: ${file(./env.json):TOKEN_NAME}
     events:
       - http:
           path: /changepassword

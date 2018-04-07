@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
 export function tokenIsValid(token) {
-  jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
+  return jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
     if (err) {
       console.log(err);
       return false;
@@ -12,9 +12,11 @@ export function tokenIsValid(token) {
 }
 
 export function genToken(str) {
+  const hoursToLive = process.env.NODE_ENV === 'production' ? 48 : 87600; // dev tokens last 10 years for tests
+
   return jwt.sign({
     data: str,
-    exp: Math.floor(Date.now() / 1000) + (60 * 48) // 48 hours
+    exp: Math.floor(Date.now() / 1000) + (60 * hoursToLive)
   }, process.env.JWT_SECRET);
 }
 

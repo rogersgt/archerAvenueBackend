@@ -20,7 +20,8 @@ Create a `env.json` file with at least the following:
   "HASH_STRING": "anyStringForHashingPasswords",
   "LOGIN_TABLE": "nameOfADynamoDBtableToCreate",
   "AWS_REGION": "us-east-1",
-  "JWT_SECRET": "anyStringForSigningTokens"
+  "JWT_SECRET": "anyStringForSigningTokens",
+  "TOKEN_NAME": "anyStringToNameJWTCookies"
 }
 ```
 

@@ -9,7 +9,8 @@
     "deploy:prod": "yarn --production=true && yarn build && serverless deploy --stage prod",
     "test:unit": "yarn build && mocha --require babel-core/register",
     "test:login": "yarn build && SLS_DEBUG=* serverless invoke local -f login -p test/events/login.event.json --stage dev",
-    "test:mail": "yarn build && SLS_DEBUG=* serverless invoke local -f mail -p test/events/mail.event.json --stage dev"
+    "test:mail": "yarn build && SLS_DEBUG=* serverless invoke local -f mail -p test/events/mail.event.json --stage dev",
+    "test:changePassword": "yarn build && SLS_DEBUG=* serverless invoke local -f changePassword -p test/events/changePassword.event.json --stage dev"
   },
   "author": "Grady Rogers",
   "license": "ISC",
