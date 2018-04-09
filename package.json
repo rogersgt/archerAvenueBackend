@@ -7,10 +7,11 @@
     "build": "mkdir -p dist && babel src --out-dir dist",
     "deploy:dev": "yarn --production=true && yarn build && serverless deploy --stage dev",
     "deploy:prod": "yarn --production=true && yarn build && serverless deploy --stage prod",
-    "test:unit": "yarn build && mocha --require babel-core/register",
-    "test:login": "yarn build && SLS_DEBUG=* serverless invoke local -f login -p test/events/login.event.json --stage dev",
-    "test:mail": "yarn build && SLS_DEBUG=* serverless invoke local -f mail -p test/events/mail.event.json --stage dev",
-    "test:changePassword": "yarn build && SLS_DEBUG=* serverless invoke local -f changePassword -p test/events/changePassword.event.json --stage dev"
+    "test:changePassword": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f changePassword -p test/events/changePassword.event.json --stage dev",
+    "test:getEngineers": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f getEngineers --stage dev",
+    "test:login": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f login -p test/events/login.event.json --stage dev",
+    "test:mail": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f mail -p test/events/mail.event.json --stage dev",
+    "test:unit": "yarn build && mocha --require babel-core/register"
   },
   "author": "Grady Rogers",
   "license": "ISC",

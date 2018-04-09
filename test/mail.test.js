@@ -8,9 +8,9 @@ chai.use(spies);
 const expect = chai.expect;
 const should = chai.should;
 
-dotenv.config({ path: `${__dirname}/../.env` });
+dotenv.config({ path: `${__dirname}/../unit.env` });
 
-describe('sendEmail', () => {
+describe('mail', () => {
   it('Should invoke the callback function', async () => {
     const emailMessage = {
       email: 'test@email.com',

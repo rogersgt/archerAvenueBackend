@@ -21,6 +21,8 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment:
     NODE_ENV: ${file(./env.json):NODE_ENV}
+    LOGIN_TABLE: Logins-${self:provider.stage}
+    ENGINEER_TABLE: Engineer-${self:provider.stage}
 
   iamRoleStatements:
     - Effect: Allow
@@ -38,22 +40,6 @@ provider:
         - s3:ListObjects
         - s3:GetObject
       Resource: '*'
-
-resources:
-  Resources:
-    LoginsTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
-        AttributeDefinitions:
-          - AttributeName: username
-            AttributeType: "S"
-        KeySchema:
-          - AttributeName: username
-            KeyType: HASH
-        TableName: ${file(./env.json):LOGIN_TABLE}
-        ProvisionedThroughput:
-          ReadCapacityUnits: 5
-          WriteCapacityUnits: 5
 
 
 functions:
@@ -91,7 +77,6 @@ functions:
         - node_modules/**
     environment:
       HASH_STRING: ${file(./env.json):HASH_STRING}
-      LOGIN_TABLE: ${file(./env.json):LOGIN_TABLE}
       JWT_SECRET: ${file(./env.json):JWT_SECRET}
       TOKEN_NAME: ${file(./env.json):TOKEN_NAME}
     events:
@@ -119,7 +104,6 @@ functions:
         - dist/toolbox/**
     environment:
       HASH_STRING: ${file(./env.json):HASH_STRING}
-      LOGIN_TABLE: ${file(./env.json):LOGIN_TABLE}
       JWT_SECRET: ${file(./env.json):JWT_SECRET}
       TOKEN_NAME: ${file(./env.json):TOKEN_NAME}
     events:
@@ -137,4 +121,97 @@ functions:
               - x-Amx-User-Agent
             allowCredentials: true
           private: true
+
+  getEngineers:
+    handler: dist/users.getEngineers
+    package:
+      include:
+        - dist/users.js
+    events:
+      - http:
+          path: /engineers
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amx-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - Z-Amx-User-Agent
+            allowCredentials: true
+          private: true
+    
       
+
+resources:
+  Resources:
+    LoginsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: username
+            AttributeType: "S"
+        KeySchema:
+          - AttributeName: username
+            KeyType: HASH
+        TableName: Logins-${self:provider.stage}
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+
+    EngineerTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: lastName
+            AttributeType: 'S'
+          - AttributeName: firstName
+            AttributeType: 'S'
+        KeySchema:
+          - AttributeName: lastName
+            KeyType: HASH
+          - AttributeName: firstName
+            KeyType: RANGE
+        TableName: Engineer-${self:provider.stage}
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
+    
+    UploadsBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        AccessControl: PublicRead
+        BucketName: acheravenue-uploads-${self:provider.stage}
+        CorsConfiguration:
+          CorsRules:
+            - AllowedMethods:
+                - GET
+                - HEAD
+                - POST
+                - PUT
+                - DELETE
+              AllowedOrigins:
+                - '*'
+              MaxAge: 300
+
+  Outputs:
+    LoginsTable:
+      Value:
+        'Ref': LoginsTable
+      Export:
+        Name: Logins-${self:provider.stage}
+
+    EngineerTable:
+      Value:
+        'Ref': EngineerTable
+      Export:
+        Name: Engineer-${self:provider.stage}
+
+    UploadsBucket:
+      Description: 'Arn of the uploads bucket'
+      Value:
+        'Fn::GetAtt': [ UploadsBucket, Arn ]
+      Export:
+        Name: ${self:service}:${opt:stage}:UploadsBucketArn
