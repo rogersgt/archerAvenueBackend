@@ -23,43 +23,51 @@ module.exports.getEngineers = async (event, context, callback) => {
 };
 
 module.exports.updateEngineer = async (event, context, callback) => {
-  try {
-    const body = handleBody(event.body);
-    if (!body.firstName || !body.LastName) {
-      callback(null, {
-        statusCode: 400,
-        body: JSON.stringify({ errorMessage: 'Must include firstName and LastName' })
-      });
-    } else {
-      const params = {
-        TableName: process.env.ENGINEER_TABLE,
-        Key: {
-          'firstName': {
-            'S': body.firstName
+  const token = event.headers['Cookie'];
+  if (!auth.tokenIsValid(token)) {
+    callback(null, {
+      statusCode: 403,
+      body: JSON.stringify({ errorMessage: 'Unauthorized.' })
+    });
+  } else {
+    try {
+      const body = handleBody(event.body);
+      if (!body.firstName || !body.LastName) {
+        callback(null, {
+          statusCode: 400,
+          body: JSON.stringify({ errorMessage: 'Must include firstName and LastName' })
+        });
+      } else {
+        const params = {
+          TableName: process.env.ENGINEER_TABLE,
+          Key: {
+            'firstName': {
+              'S': body.firstName
+            },
+            'lastName': {
+              'S': body.LastName
+            }
           },
-          'lastName': {
-            'S': body.LastName
-          }
-        },
-        ExpressionAttributeNames: {
-          '#B': 'bio'
-        },
-        ExpressionAttributeValues: {
-          ':b': {
-            'SS': !!body.bio ? body.bio : ['']
-          }
-        },
-        UpdateExpression: 'SET #B = :b',
-        ReturnValues: 'ALL_NEW'
-      };
-      const res = await ddb.updateItem(params).promise();
-      callback(null, {
-        statusCode: 200,
-        body: JSON.stringify({})
-      })
+          ExpressionAttributeNames: {
+            '#B': 'bio'
+          },
+          ExpressionAttributeValues: {
+            ':b': {
+              'SS': !!body.bio ? body.bio : ['']
+            }
+          },
+          UpdateExpression: 'SET #B = :b',
+          ReturnValues: 'ALL_NEW'
+        };
+        const res = await ddb.updateItem(params).promise();
+        callback(null, {
+          statusCode: 200,
+          body: JSON.stringify({})
+        })
+      }
+    } catch (err) {
+      console.log(err);
+      callback('There was an error updating Engineer table');
     }
-  } catch (err) {
-    console.log(err);
-    callback('There was an error updating Engineer table');
   }
 };

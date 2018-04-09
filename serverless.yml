@@ -23,8 +23,16 @@ provider:
     NODE_ENV: ${file(./env.json):NODE_ENV}
     LOGIN_TABLE: Login-${self:provider.stage}
     ENGINEER_TABLE: Engineer-${self:provider.stage}
+    UPLOAD_BUCKET: acheravenue-upload-${self:provider.stage}
+    HASH_STRING: ${file(./env.json):HASH_STRING}
+    JWT_SECRET: ${file(./env.json):JWT_SECRET}
+    TOKEN_NAME: ${file(./env.json):TOKEN_NAME}
 
   iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource: '*'
     - Effect: Allow
       Action:
         - ses:*
@@ -101,11 +109,7 @@ functions:
       include:
         - dist/login.js
         - node_modules/**
-        - dist/toolbox/**
-    environment:
-      HASH_STRING: ${file(./env.json):HASH_STRING}
-      JWT_SECRET: ${file(./env.json):JWT_SECRET}
-      TOKEN_NAME: ${file(./env.json):TOKEN_NAME}
+        - dist/toolbox/**      
     events:
       - http:
           path: /changepassword
@@ -201,12 +205,30 @@ resources:
         ProvisionedThroughput:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5
+
+    GearTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        AttributeDefinitions:
+          - AttributeName: name
+            AttributeType: 'S'
+          - AttributeName: type
+            AttributeType: 'S'
+        KeySchema:
+          - AttributeName: name
+            KeyType: HASH
+          - AttributeName: type
+            KeyType: RANGE
+        TableName: Gear-${self:provider.stage}
+        ProvisionedThroughput:
+          ReadCapacityUnits: 5
+          WriteCapacityUnits: 5
     
-    UploadsBucket:
+    UploadBucket:
       Type: AWS::S3::Bucket
       Properties:
         AccessControl: PublicRead
-        BucketName: acheravenue-uploads-${self:provider.stage}
+        BucketName: acheravenue-upload-${self:provider.stage}
         CorsConfiguration:
           CorsRules:
             - AllowedMethods:
@@ -232,9 +254,15 @@ resources:
       Export:
         Name: Engineer-${self:provider.stage}
 
-    UploadsBucket:
-      Description: 'Arn of the uploads bucket'
+    GearTable:
       Value:
-        'Fn::GetAtt': [ UploadsBucket, Arn ]
+        'Ref': GearTable
       Export:
-        Name: ${self:service}:${opt:stage}:UploadsBucketArn
+        Name: Gear-${self:provider.stage}
+
+    UploadBucket:
+      Description: 'Arn of the upload bucket'
+      Value:
+        'Fn::GetAtt': [ UploadBucket, Arn ]
+      Export:
+        Name: ${self:service}:${opt:stage}:UploadBucketArn

@@ -59,8 +59,6 @@ module.exports.changePassword = async (event, context, callback) => {
   try {
     const body = handleBody(event.body);
     const token = event.headers['Cookie'];
-    // console.log(`Cookie is: ${token}`);
-    // console.log(`Token is valid: ${auth.tokenIsValid(token)}`);
     if (!auth.tokenIsValid(token)) {
       callback(null, {
         statusCode: 403,
