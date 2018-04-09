@@ -36,8 +36,18 @@ Use `yarn deploy:dev` or `yarn deploy:prod`.
 
 
 #### Set up
-Use the tools in `setup/` to create logins and setup a fresh deployment.
+* After the first deployment, adding the following to `e2e.env`:
 ```bash
+LOGIN_TABLE=<Name of DynamoDB login table from the stack>
+ENGINEER_TABLE=<Name of DynamoDB Engineer table from the stack>
+```
+
+* Use the tools in `setup/` to create logins and setup a fresh deployment.
+```bash
+# this adds the environment variables to the current terminal session
+source e2e.env
 # this adds a username "grady" to the Logins table with a password of "bacon123"
-babel-node setup/addUser.js grady bacon123
+babel-node setup/addLogin.js grady bacon123
+# this adds an entry into the Engineer table with values firstName: grady, lastName: rogers
+babel-node setup/addEngineer.js grady rogers
 ```

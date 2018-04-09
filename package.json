@@ -11,7 +11,8 @@
     "test:getEngineers": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f getEngineers --stage dev",
     "test:login": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f login -p test/events/login.event.json --stage dev",
     "test:mail": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f mail -p test/events/mail.event.json --stage dev",
-    "test:unit": "yarn build && mocha --require babel-core/register"
+    "test:unit": "yarn build && mocha --require babel-core/register",
+    "test:updateEngineer": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f updateEngineer -p test/events/updateEngineer.event.json --stage dev"
   },
   "author": "Grady Rogers",
   "license": "ISC",

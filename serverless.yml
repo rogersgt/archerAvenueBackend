@@ -12,7 +12,7 @@ frameworkVersion: ">=1.0.0 <2.0.0"
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   logRetentionInDays: 3 # Set the default RetentionInDays for a CloudWatch LogGroup
   apiKeys:
     - archerave_${opt:stage}
@@ -21,7 +21,7 @@ provider:
   stage: ${opt:stage, 'dev'}
   environment:
     NODE_ENV: ${file(./env.json):NODE_ENV}
-    LOGIN_TABLE: Logins-${self:provider.stage}
+    LOGIN_TABLE: Login-${self:provider.stage}
     ENGINEER_TABLE: Engineer-${self:provider.stage}
 
   iamRoleStatements:
@@ -123,14 +123,37 @@ functions:
           private: true
 
   getEngineers:
-    handler: dist/users.getEngineers
+    handler: dist/engineer.getEngineers
     package:
       include:
-        - dist/users.js
+        - dist/engineer.js
     events:
       - http:
           path: /engineers
           method: get
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amx-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - Z-Amx-User-Agent
+            allowCredentials: true
+          private: true
+
+  updateEngineer:
+    handler: dist/engineer.updateEngineer
+    package:
+      include:
+        - dist/engineer.js
+        - dist/toolbox/**
+        - node_modules/**
+    events:
+      - http:
+          path: /engineers
+          method: put
           cors:
             origin: '*'
             headers:
@@ -147,7 +170,7 @@ functions:
 
 resources:
   Resources:
-    LoginsTable:
+    LoginTable:
       Type: AWS::DynamoDB::Table
       Properties:
         AttributeDefinitions:
@@ -156,7 +179,7 @@ resources:
         KeySchema:
           - AttributeName: username
             KeyType: HASH
-        TableName: Logins-${self:provider.stage}
+        TableName: Login-${self:provider.stage}
         ProvisionedThroughput:
           ReadCapacityUnits: 5
           WriteCapacityUnits: 5
@@ -197,11 +220,11 @@ resources:
               MaxAge: 300
 
   Outputs:
-    LoginsTable:
+    LoginTable:
       Value:
-        'Ref': LoginsTable
+        'Ref': LoginTable
       Export:
-        Name: Logins-${self:provider.stage}
+        Name: Login-${self:provider.stage}
 
     EngineerTable:
       Value:
