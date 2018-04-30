@@ -23,6 +23,7 @@ provider:
     NODE_ENV: ${file(./env.json):NODE_ENV}
     LOGIN_TABLE: Login-${self:provider.stage}
     ENGINEER_TABLE: Engineer-${self:provider.stage}
+    GEAR_TABLE: Gear-${self:provider.stage}
     UPLOAD_BUCKET: acheravenue-upload-${self:provider.stage}
     HASH_STRING: ${file(./env.json):HASH_STRING}
     JWT_SECRET: ${file(./env.json):JWT_SECRET}

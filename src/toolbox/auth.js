@@ -2,13 +2,16 @@ import crypto from 'crypto';
 import jwt from 'jsonwebtoken';
 
 export function tokenIsValid(token) {
-  return jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-    if (err) {
-      console.log(err);
-      return false;
+  try {
+    const decoded = jwt.verify(`${token}`, process.env.JWT_SECRET);
+    if (!!decoded && !!decoded.data) {
+      return true;
     }
-    return true;
-  });
+    return false;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 }
 
 export function genToken(str) {

@@ -3,18 +3,21 @@ import 'babel-polyfill';
 import { handleBody } from './toolbox/validator';
 import * as auth from './toolbox/auth';
 import { DynamoDB } from 'aws-sdk';
+import { getTokenFromEvent } from './toolbox/shaper';
 
 const ddb = new DynamoDB({ apiVersion: '2012-08-10' });
 
 // ------------- lambda export ---------------- //
 module.exports.login = async function(event, context, callback) {
   const body = handleBody(event.body);
-  console.log(`Running in ${process.env.NODE_ENV} mode`);
 
   if (!body || !body.username || !body.password) {
     callback(null, {
       statusCode: 400,
-      body: JSON.stringify({ errorMessage: 'Bad Request. Include username and password.' })
+      body: JSON.stringify({ errorMessage: 'Bad Request. Include username and password.' }),
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      }
     });
   }
 
@@ -30,23 +33,30 @@ module.exports.login = async function(event, context, callback) {
     const dynamoRes = await ddb.getItem(params).promise();
     if (!dynamoRes || !dynamoRes.Item) {
       callback('No user found');
-    }
-
-    const hashedPasswordAttempt = auth.hashPassword(body.password);
-    if (hashedPasswordAttempt === dynamoRes.Item.password.S) {
-      const token = auth.genToken(body.username);
-
-      callback(null, {
-        statusCode: 204,
-        headers: {
-          'Set-Cookie': `${process.env.TOKEN_NAME}=${token}`
-        }
-      });
     } else {
-      callback(null, {
-        statusCode: 403,
-        body: JSON.stringify({ errorMessage: 'Username or password is incorrect' })
-      });
+      const hashedPasswordAttempt = auth.hashPassword(body.password);
+      console.log(dynamoRes);
+      if (hashedPasswordAttempt === dynamoRes.Item.password.S) {
+        const token = auth.genToken(body.username);
+
+        callback(null, {
+          statusCode: 200,
+          body: JSON.stringify({
+            token
+          }),
+          headers: {
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+      } else {
+        callback(null, {
+          statusCode: 403,
+          body: JSON.stringify({ errorMessage: 'Username or password is incorrect' }),
+          headers: {
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
+      }
     }
   } catch(err) {
     console.log(err);
@@ -58,7 +68,7 @@ module.exports.login = async function(event, context, callback) {
 module.exports.changePassword = async (event, context, callback) => {
   try {
     const body = handleBody(event.body);
-    const token = event.headers['Cookie'];
+    const token = getTokenFromEvent(event);
     if (!auth.tokenIsValid(token)) {
       callback(null, {
         statusCode: 403,
