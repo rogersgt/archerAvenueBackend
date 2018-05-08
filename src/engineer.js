@@ -3,6 +3,7 @@ import 'babel-polyfill';
 import * as auth from './toolbox/auth';
 import { handleBody } from './toolbox/validator';
 import { DynamoDB } from 'aws-sdk';
+import { getTokenFromEvent } from './toolbox/shaper';
 
 const ddb = new DynamoDB({ apiVersion: '2012-08-10' });
 
@@ -12,6 +13,7 @@ module.exports.getEngineers = async (event, context, callback) => {
       TableName: `${process.env.ENGINEER_TABLE}`
     };
     const res = await ddb.scan(params).promise();
+    console.log(res);
     callback(null, {
       statusCode: 200,
       body: JSON.stringify(res)
@@ -23,7 +25,7 @@ module.exports.getEngineers = async (event, context, callback) => {
 };
 
 module.exports.updateEngineer = async (event, context, callback) => {
-  const token = event.headers['Cookie'];
+  const token = getTokenFromEvent(event);
   if (!auth.tokenIsValid(token)) {
     callback(null, {
       statusCode: 403,
@@ -31,8 +33,9 @@ module.exports.updateEngineer = async (event, context, callback) => {
     });
   } else {
     try {
-      const body = handleBody(event.body);
-      if (!body.firstName || !body.LastName) {
+      const body = handleBody(event.body);console.log(body);
+      console.log(event);
+      if (!body.firstName || !body.lastName) {
         callback(null, {
           statusCode: 400,
           body: JSON.stringify({ errorMessage: 'Must include firstName and LastName' })
@@ -45,7 +48,7 @@ module.exports.updateEngineer = async (event, context, callback) => {
               'S': body.firstName
             },
             'lastName': {
-              'S': body.LastName
+              'S': body.lastName
             }
           },
           ExpressionAttributeNames: {

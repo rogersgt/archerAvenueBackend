@@ -132,6 +132,8 @@ functions:
     package:
       include:
         - dist/engineer.js
+        - node_modules/**
+        - dist/toolbox/**
     events:
       - http:
           path: /engineers
