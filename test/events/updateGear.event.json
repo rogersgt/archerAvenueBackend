@@ -1,0 +1,10 @@
+{
+  "body": {
+    "name": "SM7B",
+    "type": "Microphone",
+    "image": "anything"
+  },
+  "headers": {
+    "Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiZ3JhZHkiLCJleHAiOjE1MjgzODQxMzMsImlhdCI6MTUyMzEyODEzM30.rY685YJTzsNOA9Ov3hoF3mfB55QUFRO2ncCu682wpfU"
+  }
+}

@@ -13,11 +13,10 @@ module.exports.getEngineers = async (event, context, callback) => {
       TableName: `${process.env.ENGINEER_TABLE}`
     };
     const res = await ddb.scan(params).promise();
-    console.log(res);
     callback(null, {
       statusCode: 200,
       body: JSON.stringify(res)
-    })
+    });
   } catch (err) {
     console.log(err);
     callback('There was an error retrieving engineer data');
@@ -34,7 +33,6 @@ module.exports.updateEngineer = async (event, context, callback) => {
   } else {
     try {
       const body = handleBody(event.body);console.log(body);
-      console.log(event);
       if (!body.firstName || !body.lastName) {
         callback(null, {
           statusCode: 400,
@@ -65,7 +63,7 @@ module.exports.updateEngineer = async (event, context, callback) => {
         const res = await ddb.updateItem(params).promise();
         callback(null, {
           statusCode: 200,
-          body: JSON.stringify({})
+          body: JSON.stringify(res)
         })
       }
     } catch (err) {

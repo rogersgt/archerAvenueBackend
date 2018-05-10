@@ -12,7 +12,11 @@
     "test:login": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f login -p test/events/login.event.json --stage dev",
     "test:mail": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f mail -p test/events/mail.event.json --stage dev",
     "test:unit": "yarn build && mocha --require babel-core/register",
-    "test:updateEngineer": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f updateEngineer -p test/events/updateEngineer.event.json --stage dev"
+    "test:updateEngineer": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f updateEngineer -p test/events/updateEngineer.event.json --stage dev",
+    "test:getGear": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f getGear --stage dev",
+    "test:addGear": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f addGear -p test/events/addGear.event.json --stage dev",
+    "test:updateGear": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f updateGear -p test/events/updateGear.event.json --stage dev",
+    "test:deleteGear": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f deleteGear -p test/events/deleteGear.event.json --stage dev"
   },
   "author": "Grady Rogers",
   "license": "ISC",
