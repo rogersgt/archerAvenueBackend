@@ -8,20 +8,26 @@ import { getTokenFromEvent } from './toolbox/shaper';
 const ddb = new DynamoDB({ apiVersion: '2012-08-10' });
 
 module.exports.getEngineers = async (event, context, callback) => {
+  console.log(event);
   try {
     const params = {
       TableName: `${process.env.ENGINEER_TABLE}`
     };
     const res = await ddb.scan(params).promise();
+
     callback(null, {
       statusCode: 200,
-      body: JSON.stringify(res)
+      body: JSON.stringify(res),
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      }
     });
   } catch (err) {
     console.log(err);
     callback('There was an error retrieving engineer data');
   }
 };
+
 
 module.exports.updateEngineer = async (event, context, callback) => {
   const token = getTokenFromEvent(event);
@@ -54,7 +60,7 @@ module.exports.updateEngineer = async (event, context, callback) => {
           },
           ExpressionAttributeValues: {
             ':b': {
-              'SS': !!body.bio ? body.bio : ['']
+              'SS': !!body.bio ? body.bio : []
             }
           },
           UpdateExpression: 'SET #B = :b',
@@ -63,7 +69,10 @@ module.exports.updateEngineer = async (event, context, callback) => {
         const res = await ddb.updateItem(params).promise();
         callback(null, {
           statusCode: 200,
-          body: JSON.stringify(res)
+          body: JSON.stringify(res),
+          headers: {
+            'Access-Control-Allow-Origin': '*'
+          }
         })
       }
     } catch (err) {

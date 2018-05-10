@@ -58,7 +58,10 @@ module.exports.updateGear = async (event, context, callback) => {
           const res = await ddb.updateItem(params).promise();
           callback(null, {
             statusCode: 200,
-            body: JSON.stringify(res)
+            body: JSON.stringify(res),
+            headers: {
+              'Access-Control-Allow-Origin': '*'
+            }
           });
         }
       }
@@ -77,7 +80,10 @@ module.exports.getGear = async (event, context, callback) => {
     const res = await ddb.scan(params).promise();
     callback(null, {
       statusCode: 200,
-      body: JSON.stringify(res)
+      body: JSON.stringify(res),
+      headers: {
+        'Access-Control-Allow-Origin': '*'
+      }
     });
   } catch (error) {
     console.log(error);
@@ -122,7 +128,10 @@ module.exports.addGear = async (event, context, callback) => {
         const res = await ddb.putItem(params).promise();
         callback(null, {
           statusCode: 200,
-          body: JSON.stringify(res)
+          body: JSON.stringify(res),
+          headers: {
+            'Access-Control-Allow-Origin': '*'
+          }
         });
       }
     } catch (error) {
@@ -166,7 +175,10 @@ module.exports.deleteGear = async (event, context, callback) => {
           };
           await ddb.deleteItem(params).promise();
           callback(null, {
-            statusCode: 200
+            statusCode: 200,
+            headers: {
+              'Access-Control-Allow-Origin': '*'
+            }
           });
         } catch (error) {
           console.log(error);

@@ -124,7 +124,12 @@ module.exports.changePassword = async (event, context, callback) => {
           TableName: process.env.LOGIN_TABLE
         }
         await ddb.updateItem(updateParams).promise();
-        callback(null, { statusCode: 204 });
+        callback(null, {
+          statusCode: 204,
+          headers: {
+            'Access-Control-Allow-Origin': '*'
+          }
+        });
       }
     }
   } catch (err) {

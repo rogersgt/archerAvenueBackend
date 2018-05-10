@@ -50,8 +50,9 @@ provider:
         - s3:GetObject
       Resource: '*'
 
-
+# --------------------------- functions --------------------------- #
 functions:
+# ---- email ---- #
   mail:
     handler: dist/mail.mail
     package:
@@ -77,6 +78,7 @@ functions:
             allowCredentials: true
           private: true
 
+# ----- logins ----- #
   login:
     handler: dist/login.login
     package:
@@ -127,6 +129,7 @@ functions:
             allowCredentials: true
           private: true
 
+# ----- engineers ------ #
   getEngineers:
     handler: dist/engineer.getEngineers
     package:
@@ -196,6 +199,7 @@ functions:
             allowCredentials: true
           private: true
 
+# ------ gear ------- #
   addGear:
     handler: dist/gear.addGear
     package:
@@ -264,6 +268,9 @@ functions:
               - Z-Amx-User-Agent
             allowCredentials: true
           private: true
+
+# ------ uploads ---- #
+
 
 # -------------------------- Resources -------------------------- #
 resources:

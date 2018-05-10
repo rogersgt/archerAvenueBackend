@@ -3,7 +3,8 @@
     "firstName": "Kenny",
     "lastName": "McWilliams",
     "bio": [
-      "About Kenny."
+      "About Kenny.",
+      "More about Kenny."
     ]
   },
   "headers": {
