@@ -16,7 +16,8 @@
     "test:getGear": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f getGear --stage dev",
     "test:addGear": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f addGear -p test/events/addGear.event.json --stage dev",
     "test:updateGear": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f updateGear -p test/events/updateGear.event.json --stage dev",
-    "test:deleteGear": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f deleteGear -p test/events/deleteGear.event.json --stage dev"
+    "test:deleteGear": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f deleteGear -p test/events/deleteGear.event.json --stage dev",
+    "test:uploadFile": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f uploadFile -p test/events/uploadFile.event.json --stage dev"
   },
   "author": "Grady Rogers",
   "license": "ISC",

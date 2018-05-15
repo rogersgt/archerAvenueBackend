@@ -270,6 +270,27 @@ functions:
           private: true
 
 # ------ uploads ---- #
+  uploadFile:
+    handler: dist/upload.uploadFile
+    package:
+      - dist/upload.js
+      - dist/toolbox/**
+      - node_modules/**
+    events:
+      - http:
+          path: /upload
+          method: post
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amx-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - Z-Amx-User-Agent
+            allowCredentials: true
+          private: true
 
 
 # -------------------------- Resources -------------------------- #
