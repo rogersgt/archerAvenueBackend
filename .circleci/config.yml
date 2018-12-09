@@ -12,6 +12,9 @@ jobs:
       - setup_remote_docker
       - checkout
       - run:
+          name: Get Env File
+          command: aws s3 cp s3://rogers-config/env-var/archeravenueBackend/env.json ./ --region $AWS_REGION
+      - run:
           name: Deploy
           command: yarn deploy:prod
 
