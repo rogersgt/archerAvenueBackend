@@ -1,7 +1,7 @@
 defaults: &defaults
   working_directory: ~/app
   docker:
-    - image: node:8.10
+    - image: gradyrogers/awscli
 
 version: 2
 jobs:
@@ -16,7 +16,7 @@ jobs:
           command: aws s3 cp s3://rogers-config/env-var/archeravenueBackend/env.json ./ --region $AWS_REGION
       - run:
           name: Deploy
-          command: yarn deploy:prod
+          command: npm run deploy:prod
 
 workflows:
   version: 2
