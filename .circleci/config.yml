@@ -1,0 +1,27 @@
+defaults: &defaults
+  working_directory: ~/app
+  docker:
+    - image: node:8.10
+
+version: 2
+jobs:
+
+  deploy:
+    <<: *defaults
+    steps:
+      - setup_remote_docker
+      - checkout
+      - run:
+          name: Deploy
+          command: yarn deploy:prod
+
+workflows:
+  version: 2
+
+  deployment:
+    jobs:
+      - deploy:
+          filters:
+            branches:
+              only:
+                - master
