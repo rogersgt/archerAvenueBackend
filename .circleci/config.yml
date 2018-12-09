@@ -1,7 +1,7 @@
 defaults: &defaults
   working_directory: ~/app
   docker:
-    - image: softinstigate/serverless
+    - image: node:8.10
 
 version: 2
 jobs:

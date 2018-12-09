@@ -5,8 +5,8 @@
   "main": "handler.js",
   "scripts": {
     "build": "mkdir -p dist && babel src --out-dir dist",
-    "deploy:dev": "yarn --production=true && yarn build && serverless deploy --stage dev",
-    "deploy:prod": "yarn --production=true && yarn build && serverless deploy --stage prod",
+    "deploy:dev": "yarn && yarn build && serverless deploy --stage dev",
+    "deploy:prod": "yarn && yarn build && serverless deploy --stage prod",
     "test:changePassword": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f changePassword -p test/events/changePassword.event.json --stage dev",
     "test:getEngineers": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f getEngineers --stage dev",
     "test:login": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f login -p test/events/login.event.json --stage dev",
