@@ -16,7 +16,7 @@ jobs:
           command: aws s3 cp s3://rogers-config/env-vars/archeravenueBackend/env.json ./ --region $AWS_REGION
       - run:
           name: Deploy
-          command: npm run deploy:prod
+          command: npm run deploy:dev
 
 workflows:
   version: 2
