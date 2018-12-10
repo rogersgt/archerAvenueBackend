@@ -40,6 +40,7 @@ Use `yarn deploy:dev` or `yarn deploy:prod`.
 ```bash
 LOGIN_TABLE=<Name of DynamoDB login table from the stack>
 ENGINEER_TABLE=<Name of DynamoDB Engineer table from the stack>
+HASH_STRING=<same as env.json>
 ```
 
 * Use the tools in `setup/` to create logins and setup a fresh deployment.

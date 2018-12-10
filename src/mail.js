@@ -40,13 +40,13 @@ module.exports.mail = async function(event, context, callback) {
       ReplyToAddresses: [data.email]
     };
 
-    const sesResponse = await ses.sendEmail(emailParams).promise();
+    await ses.sendEmail(emailParams).promise();
 
     callback(null, {
       statusCode: 204,
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': '*'
+        'Access-Control-Allow-Credentials': true
       }
     });
 

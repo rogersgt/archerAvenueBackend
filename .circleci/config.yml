@@ -4,7 +4,7 @@ defaults: &defaults
     - image: gradyrogers/awscli
 
 version: 2
-jobs:
+jobs: 
 
   deploy:
     <<: *defaults
