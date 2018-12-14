@@ -59,6 +59,7 @@ functions:
       include:
         - dist/toolbox/*
         - dist/mail.js
+        - node_modules/**
     environment:
      TO_EMAIL: ${file(./env.json):TO_EMAIL}
      FROM_EMAIL: ${file(./env.json):FROM_EMAIL}
