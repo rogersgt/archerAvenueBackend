@@ -66,6 +66,7 @@ functions:
       - http:
           path: /mail
           method: post
+          integration: lambda
           cors:
             origin: '*'
             headers:
