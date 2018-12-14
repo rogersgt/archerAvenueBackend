@@ -41,6 +41,7 @@ module.exports.mail = async function(event, context, callback) {
     };
 
     const res = await ses.sendEmail(emailParams).promise();
+    console.log(res);
 
     callback(null, {
       statusCode: 200,
