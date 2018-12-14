@@ -41,16 +41,23 @@ module.exports.mail = async function(event, context, callback) {
     };
 
     const res = await ses.sendEmail(emailParams).promise();
-    console.log(res);
-
-    callback(null, {
-      statusCode: 200,
-      headers: {
-        'Access-Control-Allow-Origin': '*'
-      },
-      body: JSON.stringify(res),
-    });
-
+    if (res.Error || res.errorMessage) {
+      callback(null, {
+        statusCode: 500,
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify(res),
+      });
+    } else {
+      callback(null, {
+        statusCode: 200,
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        },
+        body: JSON.stringify(res),
+      });
+    }
   } else {
     callback('Invalid request body');
   }
