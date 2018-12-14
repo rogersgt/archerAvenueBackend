@@ -45,8 +45,7 @@ module.exports.mail = async function(event, context, callback) {
     callback(null, {
       statusCode: 204,
       headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Credentials': true
+        'Access-Control-Allow-Origin': '*'
       }
     });
 
