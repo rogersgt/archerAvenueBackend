@@ -28,6 +28,7 @@ provider:
     HASH_STRING: ${file(./env.json):HASH_STRING}
     JWT_SECRET: ${file(./env.json):JWT_SECRET}
     TOKEN_NAME: ${file(./env.json):TOKEN_NAME}
+    APP_ORIGIN: ${file(./env.json):APP_ORIGIN}
 
   iamRoleStatements:
     - Effect: Allow
@@ -333,26 +334,26 @@ resources:
   Resources:
     # This response is needed for custom authorizer failures cors support ¯\_(ツ)_/¯
     # Thanks https://github.com/serverless/examples/blob/master/aws-node-auth0-custom-authorizers-api/serverless.yml#L36-L55
-    GatewayResponse:
-      Type: 'AWS::ApiGateway::GatewayResponse'
-      Properties:
-        ResponseParameters:
-          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
-        ResponseType: EXPIRED_TOKEN
-        RestApiId:
-          Ref: 'ApiGatewayRestApi'
-        StatusCode: '401'
-    AuthFailureGatewayResponse:
-      Type: 'AWS::ApiGateway::GatewayResponse'
-      Properties:
-        ResponseParameters:
-          gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
-          gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
-        ResponseType: UNAUTHORIZED
-        RestApiId:
-          Ref: 'ApiGatewayRestApi'
-        StatusCode: '401'
+    # GatewayResponse:
+    #   Type: 'AWS::ApiGateway::GatewayResponse'
+    #   Properties:
+    #     ResponseParameters:
+    #       gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+    #       gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+    #     ResponseType: EXPIRED_TOKEN
+    #     RestApiId:
+    #       Ref: 'ApiGatewayRestApi'
+    #     StatusCode: '401'
+    # AuthFailureGatewayResponse:
+    #   Type: 'AWS::ApiGateway::GatewayResponse'
+    #   Properties:
+    #     ResponseParameters:
+    #       gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
+    #       gatewayresponse.header.Access-Control-Allow-Headers: "'*'"
+    #     ResponseType: UNAUTHORIZED
+    #     RestApiId:
+    #       Ref: 'ApiGatewayRestApi'
+    #     StatusCode: '401'
 
     LoginTable:
       Type: AWS::DynamoDB::Table
