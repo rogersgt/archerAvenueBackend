@@ -4,6 +4,9 @@ import { handleBody } from './toolbox/validator';
 import * as auth from './toolbox/auth';
 import { DynamoDB } from 'aws-sdk';
 import { getTokenFromEvent } from './toolbox/shaper';
+import badRequest from './responses/badRequest';
+import success from './responses/success';
+import unauthorized from './responses/unauthorized';
 
 const ddb = new DynamoDB({ apiVersion: '2012-08-10' });
 
@@ -12,13 +15,7 @@ module.exports.login = async function(event, context, callback) {
   const body = handleBody(event.body);
 
   if (!body || !body.username || !body.password) {
-    callback(null, {
-      statusCode: 400,
-      body: JSON.stringify({ errorMessage: 'Bad Request. Include username and password.' }),
-      headers: {
-        'Access-Control-Allow-Origin': '*'
-      }
-    });
+    callback(null, badRequest('Bad Request. Include username and password.'));
   }
 
   const params = {
@@ -35,19 +32,10 @@ module.exports.login = async function(event, context, callback) {
       callback('No user found');
     } else {
       const hashedPasswordAttempt = auth.hashPassword(body.password);
-      console.log(dynamoRes);
       if (hashedPasswordAttempt === dynamoRes.Item.password.S) {
         const token = auth.genToken(body.username);
 
-        callback(null, {
-          statusCode: 200,
-          body: JSON.stringify({
-            token
-          }),
-          headers: {
-            'Access-Control-Allow-Origin': '*'
-          }
-        });
+        callback(null, success());
       } else {
         callback(null, {
           statusCode: 403,
@@ -70,17 +58,9 @@ module.exports.changePassword = async (event, context, callback) => {
     const body = handleBody(event.body);
     const token = getTokenFromEvent(event);
     if (!auth.tokenIsValid(token)) {
-      callback(null, {
-        statusCode: 403,
-        body: JSON.stringify({ errorMessage: 'Unauthorized' })
-      });
+      callback(null, unauthorized());
     } else if (!body.username || !body.oldPassword || !body.newPassword) {
-      callback(null, {
-        statusCode: 400,
-        body: JSON.stringify({
-          errorMessage: 'Bad request. Must include: [username, oldPassword, newPassword]'
-        })
-      })
+      callback(null, badRequest())
     } else {
       const searchParams = {
         Key: {
@@ -92,19 +72,11 @@ module.exports.changePassword = async (event, context, callback) => {
       };
       const res = await ddb.getItem(searchParams).promise();
       if (!res || !res.Item || !res.Item.username) {
-        callback(null, {
-          statusCode: 403,
-          body: JSON.stringify({ errorMessage: 'User not found.' })
-        });
+        callback(null, unauthorized('User not found.'));
       }
       const hashedOldPassword = auth.hashPassword(body.oldPassword);
       if (hashedOldPassword !== res.Item.password['S']) {
-        callback(null, {
-          statusCode: 403,
-          body: JSON.stringify({
-            errorMessage: 'Unauthorized.'
-          })
-        });
+        callback(null, unauthorized());
       } else {
         const updateParams = {
           ExpressionAttributeNames: {
@@ -124,12 +96,7 @@ module.exports.changePassword = async (event, context, callback) => {
           TableName: process.env.LOGIN_TABLE
         }
         await ddb.updateItem(updateParams).promise();
-        callback(null, {
-          statusCode: 204,
-          headers: {
-            'Access-Control-Allow-Origin': '*'
-          }
-        });
+        callback(null, success());
       }
     }
   } catch (err) {

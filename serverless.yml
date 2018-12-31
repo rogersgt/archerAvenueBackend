@@ -155,6 +155,29 @@ functions:
             allowCredentials: true
           private: true
 
+  getEngineer:
+    handler: dist/engineer.getEngineer
+    package:
+      include:
+        - dist/engineer.js
+        - node_modules/**
+        - dist/toolbox/**
+    events:
+      - http:
+          path: /engineers
+          method: get
+          cors:
+            origin: '*'
+            headers:
+              - Content-Type
+              - X-Amx-Date
+              - Authorization
+              - X-Api-Key
+              - X-Amz-Security-Token
+              - Z-Amx-User-Agent
+            allowCredentials: true
+          private: true
+
   updateEngineer:
     handler: dist/engineer.updateEngineer
     package:

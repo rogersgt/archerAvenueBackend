@@ -8,6 +8,7 @@
     "deploy:dev": "yarn && yarn build && serverless deploy --stage dev",
     "deploy:prod": "yarn && yarn build && serverless deploy --stage prod",
     "test:changePassword": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f changePassword -p test/events/changePassword.event.json --stage dev",
+    "test:getEngineer": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f getEngineer -p test/events/getEngineer.event.json --stage dev",
     "test:getEngineers": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f getEngineers --stage dev",
     "test:login": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f login -p test/events/login.event.json --stage dev",
     "test:mail": "yarn build && source e2e.env && SLS_DEBUG=* serverless invoke local -f mail -p test/events/mail.event.json --stage dev",
