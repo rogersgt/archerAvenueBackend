@@ -57,6 +57,7 @@ functions:
     handler: dist/mail.mail
     package:
       include:
+        - dist/responses/*
         - dist/toolbox/*
         - dist/mail.js
         - node_modules/**
@@ -85,6 +86,7 @@ functions:
     handler: dist/login.login
     package:
       include:
+        - dist/responses/*
         - dist/toolbox/*
         - dist/login.js
         - node_modules/**
@@ -112,6 +114,7 @@ functions:
     handler: dist/login.changePassword
     package:
       include:
+        - dist/responses/*
         - dist/login.js
         - node_modules/**
         - dist/toolbox/**      
@@ -136,6 +139,7 @@ functions:
     handler: dist/engineer.getEngineers
     package:
       include:
+        - dist/responses/*
         - dist/engineer.js
         - node_modules/**
         - dist/toolbox/**
@@ -159,6 +163,7 @@ functions:
     handler: dist/engineer.getEngineer
     package:
       include:
+        - dist/responses/*
         - dist/engineer.js
         - node_modules/**
         - dist/toolbox/**
@@ -182,6 +187,7 @@ functions:
     handler: dist/engineer.updateEngineer
     package:
       include:
+        - dist/responses/*
         - dist/engineer.js
         - dist/toolbox/**
         - node_modules/**
@@ -205,6 +211,7 @@ functions:
     handler: dist/gear.getGear
     package:
       include:
+        - dist/responses/*
         - dist/gear.js
         - dist/toolbox/**
         - node_modules/**
@@ -229,6 +236,7 @@ functions:
     handler: dist/gear.addGear
     package:
       include:
+        - dist/responses/*
         - dist/gear.js
         - dist/toolbox/**
         - node_modules/**
@@ -252,6 +260,7 @@ functions:
     handler: dist/gear.updateGear
     package:
       include:
+        - dist/responses/*
         - dist/gear.js
         - dist/toolbox/**
         - node_modules/**
@@ -275,6 +284,7 @@ functions:
     handler: dist/gear.deleteGear
     package:
       include:
+        - dist/responses/*
         - dist/gear.js
         - dist/toolbox/**
         - node_modules/**

@@ -28,7 +28,8 @@ Create a `env.json` file with at least the following:
   "HASH_STRING": "anyStringForHashingPasswords",
   "AWS_REGION": "us-east-1",
   "JWT_SECRET": "anyStringForSigningTokens",
-  "TOKEN_NAME": "anyStringToNameJWTCookies"
+  "TOKEN_NAME": "anyStringToNameJWTCookies",
+  "APP_ORIGIN": "http://localhost:8080"
 }
 ```
 
