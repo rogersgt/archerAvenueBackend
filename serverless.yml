@@ -366,8 +366,8 @@ resources:
             KeyType: HASH
         TableName: Login-${self:provider.stage}
         ProvisionedThroughput:
-          ReadCapacityUnits: 5
-          WriteCapacityUnits: 5
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
 
     EngineerTable:
       Type: AWS::DynamoDB::Table
@@ -384,8 +384,8 @@ resources:
             KeyType: RANGE
         TableName: Engineer-${self:provider.stage}
         ProvisionedThroughput:
-          ReadCapacityUnits: 5
-          WriteCapacityUnits: 5
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
 
     GearTable:
       Type: AWS::DynamoDB::Table
@@ -402,8 +402,8 @@ resources:
             KeyType: RANGE
         TableName: Gear-${self:provider.stage}
         ProvisionedThroughput:
-          ReadCapacityUnits: 5
-          WriteCapacityUnits: 5
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
     
     UploadBucket:
       Type: AWS::S3::Bucket
