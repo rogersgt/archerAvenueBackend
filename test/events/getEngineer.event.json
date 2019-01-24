@@ -1,5 +1,6 @@
 {
   "pathParameters": {
-    "lastName": "McWilliams"
+    "lastname": "McWilliams",
+    "firstname": "Kenny"
   }
 }

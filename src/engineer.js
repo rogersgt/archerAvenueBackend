@@ -15,9 +15,9 @@ module.exports.getEngineers = async (event, context, callback) => {
     const params = {
       TableName: `${process.env.ENGINEER_TABLE}`
     };
-    const res = await ddb.scan(params).promise();
+    const { Items:engineers = [] } = await ddb.scan(params).promise();
 
-    callback(null, success(res));
+    callback(null, success(engineers));
   } catch (err) {
     console.log(err);
     callback('There was an error retrieving engineer data');
@@ -26,20 +26,22 @@ module.exports.getEngineers = async (event, context, callback) => {
 
 module.exports.getEngineer = async (event, context, callback) => {
   try {
-    console.log(event);
-    if (event.pathParameters && event.pathParameters.lastName) {
+    const { pathParameters } = event;
+    if (pathParameters && pathParameters.lastname && pathParameters.firstname) {
+      const { firstname, lastname } = pathParameters;
       const params = {
         Key: {
           'lastName': {
-            'S': event.pathParameters.lastName
+            'S': lastname
+          },
+          'firstName': {
+            'S': firstname
           }
         },
         TableName: `${process.env.ENGINEER_TABLE}`
       };
-      const res = await ddb.getItem(params).promise();
-      console.log(res);
-  
-      callback(null, success(res));
+      const { Item:engineer = {} } = await ddb.getItem(params).promise();  
+      callback(null, success(engineer));
     } else {
       callback(null, badRequest('Bad Request.'));
     }

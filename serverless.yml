@@ -146,7 +146,7 @@ functions:
         - dist/toolbox/**
     events:
       - http:
-          path: /engineers
+          path: /engineer
           method: get
           cors:
             origin: '*'
@@ -170,7 +170,7 @@ functions:
         - dist/toolbox/**
     events:
       - http:
-          path: /engineers
+          path: /engineer/{lastname}/{firstname}
           method: get
           cors:
             origin: '*'
@@ -183,6 +183,10 @@ functions:
               - Z-Amx-User-Agent
             allowCredentials: true
           private: true
+          request:
+            parameters:
+              lastname: true
+              firstname: true
 
   updateEngineer:
     handler: dist/engineer.updateEngineer
