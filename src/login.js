@@ -29,13 +29,19 @@ module.exports.login = async function(event, context, callback) {
   try {
     const dynamoRes = await ddb.getItem(params).promise();
     if (!dynamoRes || !dynamoRes.Item) {
-      callback('No user found');
+      callback(null, {
+        body: JSON.stringify({ errorMessage: 'Username or password is incorrect' }),
+        statusCode: 401,
+        headers: {
+          'Access-Control-Allow-Origin': '*'
+        }
+    });
     } else {
       const hashedPasswordAttempt = auth.hashPassword(body.password);
       if (hashedPasswordAttempt === dynamoRes.Item.password.S) {
         const token = auth.genToken(body.username);
         /* Return request body { token: 'ajwttoken' } */
-        callback(null, success({ token }));
+        callback(null, success());
       } else {
         callback(null, {
           statusCode: 403,
