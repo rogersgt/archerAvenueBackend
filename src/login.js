@@ -34,7 +34,7 @@ module.exports.login = async function(event, context, callback) {
       const hashedPasswordAttempt = auth.hashPassword(body.password);
       if (hashedPasswordAttempt === dynamoRes.Item.password.S) {
         const token = auth.genToken(body.username);
-
+        /* Return request body { token: 'ajwttoken' } */
         callback(null, success({ token }));
       } else {
         callback(null, {
