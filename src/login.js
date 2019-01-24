@@ -35,7 +35,7 @@ module.exports.login = async function(event, context, callback) {
       if (hashedPasswordAttempt === dynamoRes.Item.password.S) {
         const token = auth.genToken(body.username);
 
-        callback(null, success());
+        callback(null, success({ token }));
       } else {
         callback(null, {
           statusCode: 403,
