@@ -3,7 +3,8 @@ export default function success(data) {
     statusCode: !!data ? 200 : 204,
     body: data,
     headers: {
-      'Access-Control-Allow-Origin': process.env.APP_ORIGIN
+      'Access-Control-Allow-Origin': process.env.APP_ORIGIN,
+      'Access-Control-Allow-Credentials': '*'
     }
   };
 }
