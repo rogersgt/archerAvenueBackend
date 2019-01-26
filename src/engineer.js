@@ -3,7 +3,11 @@ import 'babel-polyfill';
 import * as auth from './toolbox/auth';
 import { handleBody } from './toolbox/validator';
 import { DynamoDB } from 'aws-sdk';
-import { getTokenFromEvent } from './toolbox/shaper';
+import {
+  getTokenFromEvent,
+  shapeDynamoResponseForEngineers,
+  shapeDynamoResponseForEngineer
+} from './toolbox/shaper';
 import success from './responses/success';
 import unauthorized from './responses/unauthorized';
 import badRequest from './responses/badRequest';
@@ -16,8 +20,8 @@ module.exports.getEngineers = async (event, context, callback) => {
       TableName: `${process.env.ENGINEER_TABLE}`
     };
     const { Items:engineers = [] } = await ddb.scan(params).promise();
-
-    callback(null, success(engineers));
+    const shapedEngineers = shapeDynamoResponseForEngineers(engineers);
+    callback(null, success(shapedEngineers));
   } catch (err) {
     console.log(err);
     callback('There was an error retrieving engineer data');
@@ -41,7 +45,8 @@ module.exports.getEngineer = async (event, context, callback) => {
         TableName: `${process.env.ENGINEER_TABLE}`
       };
       const { Item:engineer = {} } = await ddb.getItem(params).promise();  
-      callback(null, success(engineer));
+      const shapedEng = shapeDynamoResponseForEngineer(engineer);
+      callback(null, success(shapedEng));
     } else {
       callback(null, badRequest('Bad Request.'));
     }
