@@ -7,7 +7,7 @@ export function getTokenFromEvent(event={}) {
 }
 
 export function shapeDynamoResponseForEngineers(engineers=[]) {
-  const shapedEngineers = engineers.reduce(shapeDynamoResponseForEngineer);
+  const shapedEngineers = engineers.map(shapeDynamoResponseForEngineer);
   return shapedEngineers;
 }
 
