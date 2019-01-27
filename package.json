@@ -27,7 +27,8 @@
     "babel-core": "6.26.3",
     "babel-polyfill": "6.26.0",
     "babel-preset-env": "1.7.0",
-    "jsonwebtoken": "8.4.0"
+    "jsonwebtoken": "8.4.0",
+    "serverless": "1.36.3"
   },
   "devDependencies": {
     "aws-sdk": "2.207.0",
@@ -36,7 +37,6 @@
     "dotenv": "5.0.1",
     "eslint": "5.10.0",
     "jshint": "2.9.5",
-    "mocha": "5.0.5",
-    "serverless": "1.36.3"
+    "mocha": "5.0.5"
   }
 }

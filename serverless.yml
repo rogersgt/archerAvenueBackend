@@ -1,13 +1,9 @@
 service: archeravenue-api
 package:
-  individually: true
-  exclude:
-    - node_modules/**
-    - test/**
-    - env.json
+  individually: false
+  include:
     - dist/**
-    - src/**
-    - addUser.js
+    - node_modules/**
 frameworkVersion: ">=1.0.0 <2.0.0"
 
 provider:
@@ -56,12 +52,6 @@ functions:
 # ---- email ---- #
   mail:
     handler: dist/mail.mail
-    package:
-      include:
-        - dist/responses/*
-        - dist/toolbox/*
-        - dist/mail.js
-        - node_modules/**
     environment:
      TO_EMAIL: ${file(./env.json):TO_EMAIL}
      FROM_EMAIL: ${file(./env.json):FROM_EMAIL}
@@ -85,12 +75,6 @@ functions:
 # ----- logins ----- #
   login:
     handler: dist/login.login
-    package:
-      include:
-        - dist/responses/*
-        - dist/toolbox/*
-        - dist/login.js
-        - node_modules/**
     environment:
       HASH_STRING: ${file(./env.json):HASH_STRING}
       JWT_SECRET: ${file(./env.json):JWT_SECRET}
@@ -113,12 +97,6 @@ functions:
 
   changePassword:
     handler: dist/login.changePassword
-    package:
-      include:
-        - dist/responses/*
-        - dist/login.js
-        - node_modules/**
-        - dist/toolbox/**      
     events:
       - http:
           path: /changepassword
@@ -138,12 +116,6 @@ functions:
 # ----- engineers ------ #
   getEngineers:
     handler: dist/engineer.getEngineers
-    package:
-      include:
-        - dist/responses/*
-        - dist/engineer.js
-        - node_modules/**
-        - dist/toolbox/**
     events:
       - http:
           path: /engineer
@@ -162,12 +134,6 @@ functions:
 
   getEngineer:
     handler: dist/engineer.getEngineer
-    package:
-      include:
-        - dist/responses/*
-        - dist/engineer.js
-        - node_modules/**
-        - dist/toolbox/**
     events:
       - http:
           path: /engineer/{lastname}/{firstname}
@@ -190,12 +156,6 @@ functions:
 
   updateEngineer:
     handler: dist/engineer.updateEngineer
-    package:
-      include:
-        - dist/responses/*
-        - dist/engineer.js
-        - dist/toolbox/**
-        - node_modules/**
     events:
       - http:
           path: /engineers
@@ -214,12 +174,6 @@ functions:
 
   getGear:
     handler: dist/gear.getGear
-    package:
-      include:
-        - dist/responses/*
-        - dist/gear.js
-        - dist/toolbox/**
-        - node_modules/**
     events:
       - http:
           path: /gear
@@ -239,12 +193,6 @@ functions:
 # ------ gear ------- #
   addGear:
     handler: dist/gear.addGear
-    package:
-      include:
-        - dist/responses/*
-        - dist/gear.js
-        - dist/toolbox/**
-        - node_modules/**
     events:
       - http:
           path: /gear
@@ -263,12 +211,6 @@ functions:
 
   updateGear:
     handler: dist/gear.updateGear
-    package:
-      include:
-        - dist/responses/*
-        - dist/gear.js
-        - dist/toolbox/**
-        - node_modules/**
     events:
       - http:
           path: /gear
@@ -287,12 +229,6 @@ functions:
 
   deleteGear:
     handler: dist/gear.deleteGear
-    package:
-      include:
-        - dist/responses/*
-        - dist/gear.js
-        - dist/toolbox/**
-        - node_modules/**
     events:
       - http:
           path: /gear
@@ -312,10 +248,6 @@ functions:
 # ------ uploads ---- #
   uploadFile:
     handler: dist/upload.uploadFile
-    package:
-      - dist/upload.js
-      - dist/toolbox/**
-      - node_modules/**
     events:
       - http:
           path: /upload
