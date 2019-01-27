@@ -5,9 +5,10 @@
     "bio": [
       "About Kenny.",
       "More about Kenny."
-    ]
+    ],
+    "clients": [" "]
   },
   "headers": {
-    "Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiZ3JhZHkiLCJleHAiOjE1MjgzODQxMzMsImlhdCI6MTUyMzEyODEzM30.rY685YJTzsNOA9Ov3hoF3mfB55QUFRO2ncCu682wpfU"
+    "Authorization": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJkYXRhIjoiZ3JhZHkiLCJleHAiOjE1NTM4NzA5ODIsImlhdCI6MTU0ODYxNDk4Mn0.tpwVzhzLdIs6u08Kb8Al81dPfF3oxCmCpfqCCa2VavU"
   }
 }

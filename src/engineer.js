@@ -79,16 +79,21 @@ module.exports.updateEngineer = async (event, context, callback) => {
             }
           },
           ExpressionAttributeNames: {
-            '#B': 'bio'
+            '#B': 'bio',
+            '#C': 'clients'
           },
           ExpressionAttributeValues: {
             ':b': {
-              'SS': !!body.bio ? body.bio : []
+              'SS': !!body.bio ? body.bio : [" "]
+            },
+            ':c': {
+              'SS': !!body.clients ? body.clients : [" "]
             }
           },
-          UpdateExpression: 'SET #B = :b',
+          UpdateExpression: 'SET #B = :b, #C = :c',
           ReturnValues: 'ALL_NEW'
         };
+        console.log(params);
         const res = await ddb.updateItem(params).promise();
         callback(null, {
           statusCode: 200,
