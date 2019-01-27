@@ -23,8 +23,7 @@ module.exports.getEngineers = async (event, context, callback) => {
     const shapedEngineers = shapeDynamoResponseForEngineers(engineers);
     callback(null, success(shapedEngineers));
   } catch (err) {
-    console.log(err);
-    callback('There was an error retrieving engineer data');
+    callback(err);
   }
 };
 
@@ -104,8 +103,7 @@ module.exports.updateEngineer = async (event, context, callback) => {
         })
       }
     } catch (err) {
-      console.log(err);
-      callback('There was an error updating Engineer table');
+      callback(err);
     }
   }
 };
