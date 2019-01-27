@@ -158,7 +158,7 @@ functions:
     handler: dist/engineer.updateEngineer
     events:
       - http:
-          path: /engineers
+          path: /engineer
           method: put
           cors:
             origin: '*'
