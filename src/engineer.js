@@ -83,7 +83,7 @@ module.exports.updateEngineer = async (event, context, callback) => {
           },
           ExpressionAttributeValues: {
             ':b': {
-              'SS': !!body.bio ? body.bio : [" "]
+              'S': body.bio.toString() || ''
             },
             ':c': {
               'SS': !!body.clients ? body.clients : [" "]
