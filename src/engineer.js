@@ -92,11 +92,12 @@ module.exports.updateEngineer = async (event, context, callback) => {
           UpdateExpression: 'SET #B = :b, #C = :c',
           ReturnValues: 'ALL_NEW'
         };
-        console.log(params);
-        const res = await ddb.updateItem(params).promise();
+        const resp = await ddb.updateItem(params).promise();
+        const shapedEngineer = shapeDynamoResponseForEngineer(resp);
+
         callback(null, {
-          statusCode: 200,
-          body: JSON.stringify(res),
+          statusCode: 204,
+          body: JSON.stringify(shapedEngineer),
           headers: {
             'Access-Control-Allow-Origin': '*'
           }
