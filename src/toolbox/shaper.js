@@ -15,13 +15,13 @@ export function shapeDynamoResponseForEngineer(engineer={}) {
   const {
     firstName = {},
     lastName = {},
-    about = {},
+    bio = {},
     clients = {}
   } = engineer;
   return {
     firstName: firstName.S || '',
     lastName: lastName.S || '',
-    about: about.S || '',
+    bio: bio.S || '',
     clients: clients.SS || []
   };
 }
